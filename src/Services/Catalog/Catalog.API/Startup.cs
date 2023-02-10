@@ -36,10 +36,6 @@ namespace OneCooperative
             // register services
             services.AddScoped<ICatalogContext, CatalogContext>();
             services.AddScoped<IProductRepository, ProductRepository>();
-
-            //var serviceProvider = services.BuildServiceProvider();
-            //var logger = serviceProvider.GetService<ILogger<Product>>();
-            //services.AddSingleton(typeof(ILogger), logger);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -52,9 +48,6 @@ namespace OneCooperative
 
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog.API v1"));
-
-            // seed data
-            //SeedCooperativeData.SeedData(dbContext, userManager, roleManager).Wait();
 
             app.UseHttpsRedirection();
 
