@@ -1,5 +1,3 @@
-using OneCooperative;
-
 namespace Catalog.API
 {
     public class Program

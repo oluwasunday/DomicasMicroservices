@@ -1,9 +1,8 @@
-﻿using Catalog.API.Data;
-using Catalog.API.Entities;
-using Catalog.API.Repositories;
+﻿using Basket.API.Repositories;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Catalog.API
+namespace Basket.API
 {
     public class Startup
     {
@@ -21,6 +20,11 @@ namespace Catalog.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration.GetValue<string>("CacheSettings:ConnectionString");
+            });
+
             services.AddControllers();
 
             //Configure Swagger
@@ -30,8 +34,7 @@ namespace Catalog.API
             });
 
             // register services
-            services.AddScoped<ICatalogContext, CatalogContext>();
-            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IBasketRepository, BasketRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
