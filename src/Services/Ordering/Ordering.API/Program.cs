@@ -1,8 +1,37 @@
+using Ordering.API.Extensions;
+using Ordering.Infrastructure.Persistence;
+//using Microsoft.Extensions.DependencyInjection;
+
 namespace Ordering.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
+        {
+            var host = CreateHostBuilder(args).Build();
+
+            host.MigrateDatabase<OrderContext>(
+                (context, services) =>
+                {
+                    var logger = services.GetRequiredService<ILogger<OrderContextSeed>>();
+                    OrderContextSeed.SeedAsync(context, logger).Wait();
+                });
+            
+            host.Run();
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+
+
+
+
+
+        /*public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +57,6 @@ namespace Ordering.API
             app.MapControllers();
 
             app.Run();
-        }
+        }*/
     }
 }
