@@ -1,6 +1,8 @@
-﻿using Discount.API.Repositories;
+﻿using Microsoft.AspNetCore.Builder;
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware;
 
-namespace Discount.API
+namespace OcelotApiGw
 {
     public class Startup
     {
@@ -18,19 +20,11 @@ namespace Discount.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOcelot();
             services.AddControllers();
-
-            //Configure Swagger
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Discount.API", Version = "v1" });
-            });
-
-            // register services
-            services.AddScoped<IDiscountRepository, DiscountRepository>();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // Configure the HTTP request pipeline.
             if (env.IsDevelopment())
@@ -38,8 +32,8 @@ namespace Discount.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog.API v1"));
+            //app.UseSwagger();
+            //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog.API v1"));
 
             app.UseHttpsRedirection();
 
@@ -52,7 +46,13 @@ namespace Discount.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapGet("/", async context =>
+                {
+                    await context.Response.WriteAsync("Hello World!");
+                });
             });
+
+            await app.UseOcelot();
         }
     }
 }
