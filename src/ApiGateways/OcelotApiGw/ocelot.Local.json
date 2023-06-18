@@ -22,8 +22,9 @@
         }
       ],
       "UpstreamPathTemplate": "/Catalog",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ]//,
-      //"FileCacheOptions": { "TtlSeconds": 30 }
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "FileCacheOptions": { "TtlSeconds": 30 }
+      
     },
     {
       "DownstreamPathTemplate": "/api/v1/Catalog/{id}",
@@ -85,14 +86,14 @@
         }
       ],
       "UpstreamPathTemplate": "/Basket/Checkout",
-      "UpstreamHttpMethod": [ "POST" ] //,
-      //"RateLimitOptions": {
-      //  "ClientWhitelist": [],
-      //  "EnableRateLimiting": true,
-      //  "Period": "3s",
-      //  "PeriodTimespan": 1,
-      //  "Limit": 1
-      //}
+      "UpstreamHttpMethod": [ "POST" ],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "4s",
+        "PeriodTimespan": 1,
+        "Limit": 1
+      }
     },
 
     //Discount API
